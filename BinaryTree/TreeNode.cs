@@ -12,9 +12,9 @@ namespace BinaryTree
 
         public int Data { get; }
 
-        public TreeNode RightNode { get; private set; } //Right Child
+        public TreeNode RightNode { get; set; } //Right Child
 
-        public TreeNode LeftNode { get; private set; } //Left Child
+        public TreeNode LeftNode { get; set; } //Left Child
 
         public bool IsDeleted { get; private set; } //IsDeleted
 
@@ -61,6 +61,7 @@ namespace BinaryTree
             LeftNode?.InOrderTraversal();
 
             Console.Write(Data + " ");
+
             //if rightNode is null, call InOrderTraversal recursively
             RightNode?.InOrderTraversal();
 
@@ -68,6 +69,7 @@ namespace BinaryTree
 
         public void PreOrderTraversal()
         {
+            //Print the root first
             Console.Write(Data + " ");
 
             LeftNode?.PreOrderTraversal();
@@ -78,10 +80,13 @@ namespace BinaryTree
 
         public void PostOrderTraversal()
         {
+            //If leftNode is not null, call PostOrderTraversal recursively
             LeftNode?.PostOrderTraversal();
-
+            
+            //If rightNode is not null, call PostOrderTraversal recursively
             RightNode?.PostOrderTraversal();
 
+            //Print the tree
             Console.Write(Data + " ");
         }
 
@@ -111,5 +116,39 @@ namespace BinaryTree
             return null;
         }
 
+        public TreeNode FindRecursively(int value)
+        {
+            //return the node if the data is equal to value and soft delete is false
+            if (value == Data && IsDeleted == false)
+            {
+                return this;
+            }
+            //if the value is less than the data and the left node is not null, invoke FindRecursively on the left child node
+            if (value < Data && LeftNode != null)
+            {
+                return LeftNode.FindRecursively(value);
+            }
+            //else, check if the value is greater than the data and the right node is not null, invoke FindRecursively
+            //on the right child node
+            if (RightNode != null)
+            {
+                return RightNode.FindRecursively(value);
+            }
+
+            //return null if none of the above return value
+            return null;
+
+        }
+
+
+
+        public void SoftDelete(int value)
+        {
+            TreeNode nodeToSoftDelete = Find(value);
+
+            if (nodeToSoftDelete != null)
+                nodeToSoftDelete.IsDeleted = true;
+
+        }
     }
 }
